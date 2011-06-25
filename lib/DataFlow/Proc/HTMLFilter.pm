@@ -11,9 +11,12 @@ use Moose;
 extends 'DataFlow::Proc';
 
 use namespace::autoclean;
-use DataFlow::Types qw(HTMLFilterTypes);
+
 use HTML::TreeBuilder::XPath;
 use MooseX::Aliases;
+use Moose::Util::TypeConstraints 1.01;
+
+enum 'HTMLFilterTypes', [qw(NODE HTML VALUE)];
 
 has 'search_xpath' => (
     'is'       => 'ro',
