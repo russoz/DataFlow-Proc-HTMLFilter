@@ -44,37 +44,33 @@ has 'nochomp' => (
     'default' => 0,
 );
 
-has '+p' => (
-    'lazy'    => 1,
-    'default' => sub {
-        my $self = shift;
+sub _build_p {
+    my $self = shift;
 
-        my $proc = sub {
-            my $html = HTML::TreeBuilder::XPath->new_from_content($_);
+    my $proc = sub {
+        my $html = HTML::TreeBuilder::XPath->new_from_content($_);
 
-            #warn 'xpath is built';
-            #warn 'values if VALUES';
-            return $html->findvalues( $self->search_xpath )
-              if $self->result_type eq 'VALUE';
+        #warn 'xpath is built';
+        #warn 'values if VALUES';
+        return $html->findvalues( $self->search_xpath )
+          if $self->result_type eq 'VALUE';
 
-            #warn 'not values, find nodes';
-            my @result = $html->findnodes( $self->search_xpath );
+        #warn 'not values, find nodes';
+        my @result = $html->findnodes( $self->search_xpath );
 
-            #use Data::Dumper; warn 'result = '.Dumper(\@result);
-            return () unless @result;
-            return @result if $self->result_type eq 'NODE';
+        #use Data::Dumper; warn 'result = '.Dumper(\@result);
+        return () unless @result;
+        return @result if $self->result_type eq 'NODE';
 
-            #warn 'wants HTML';
-            return map { $_->as_HTML } @result;
-        };
+        #warn 'wants HTML';
+        return map { $_->as_HTML } @result;
+    };
 
-        my $proc2 = $self->nochomp ? $proc : sub { return chomp $proc->(@_) };
-        my $proc3 =
-          $self->ref_result ? sub { return [ $proc2->(@_) ] } : $proc2;
+    #my $proc2 = $self->nochomp ? $proc : sub { return chomp $proc->(@_) };
+    #my $proc3 = $self->ref_result ? sub { return [ $proc2->(@_) ] } : $proc2;
 
-        return $self->ref_result ? sub { return [ $proc->(@_) ] } : $proc;
-    },
-);
+    return $self->ref_result ? sub { return [ $proc->(@_) ] } : $proc;
+}
 
 __PACKAGE__->meta->make_immutable;
 
