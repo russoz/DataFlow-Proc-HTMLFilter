@@ -125,23 +125,18 @@ The C<search_xpath> attribute is mandatory.
 This attribute is a string, but its value B<must> be one of:
 C<HTML>, C<VALUE>, C<NODE>. The default is C<HTML>.
 
-=over
+=begin :list
 
-=item HTML
-
+* HTML
 The result will be the HTML content specified by C<search_xpath>.
-
-=item VALUE
-
+* VALUE
 The result will be the literal value enclosed by the tag and/or attribute
 specified by C<search_xpath>.
-
-=item NODE
-
+* NODE
 The result will be a list of L<HTML::Element> objects, as returned by the
 C<findnodes> method of L<HTML::TreeBuilder::XPath> class.
 
-=back
+=end :list
 
 Most people will probably use C<HTML> or C<VALUE>, but this option is also
 provided in case someone wants to manipulate the HTML elements directly.
